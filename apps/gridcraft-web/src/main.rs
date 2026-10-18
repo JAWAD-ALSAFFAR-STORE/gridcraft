@@ -1,4 +1,4 @@
-//! JAS Excel in the browser.
+//! JAS Sheets in the browser.
 //!
 //! Runs the same [`gridcraft_ui_egui::SheetApp`] as the desktop app through eframe's web runner
 //! (wgpu: WebGPU where available, WebGL2 otherwise). Build with `trunk build --release` from

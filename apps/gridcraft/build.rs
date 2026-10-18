@@ -14,8 +14,8 @@ fn main() {
     }
     let mut res = winresource::WindowsResource::new();
     res.set_icon("../../assets/app-icon/gridcraft.ico")
-        .set("ProductName", "JAS Excel")
-        .set("FileDescription", "JAS Excel spreadsheet")
+        .set("ProductName", "JAS Sheets")
+        .set("FileDescription", "JAS Sheets spreadsheet")
         .set("CompanyName", "Jawad Alsaffar Store")
         .set("LegalCopyright", "Copyright (c) the GridCraft authors. MIT OR Apache-2.0.")
         .set("OriginalFilename", "gridcraft.exe")

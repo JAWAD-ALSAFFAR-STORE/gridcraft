@@ -230,7 +230,7 @@ pub(super) fn translate(text: &str) -> Option<&'static str> {
         "Command\nPalette" => "Palette de commandes",
         "Agent\nControl" => "Contrôle de l’agent",
         "Action\nJournal" => "Journal des actions",
-        "About\nGridCraft" => "À propos de JAS Excel",
+        "About\nGridCraft" => "À propos de JAS Sheets",
         "Share" => "Partager",
         "Add Chart\nElement" => "Ajouter un élément de graphique",
         "Change\nChart Type" => "Modifier le type de graphique",

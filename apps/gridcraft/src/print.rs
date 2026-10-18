@@ -39,7 +39,7 @@ pub fn submit() -> Submit {
                 }),
                 grayscale: settings.grayscale,
                 scaling: craft_print::Scaling::ShrinkToFit,
-                title: "JAS Excel document".into(),
+                title: "JAS Sheets document".into(),
                 ..Default::default()
             };
             let _ = sender.send(craft_print::submit(&bytes, &job).map_err(|error| error.to_string()));

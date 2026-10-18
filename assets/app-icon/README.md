@@ -1,7 +1,7 @@
-# JAS Excel app icon
+# JAS Sheets app icon
 
 The app icon is the JAS logo of Jawad Alsaffar Store (shop.jawadalsaffar.com) on a navy rounded
-tile, with a green "EXCEL" label that tells the JAS apps apart. At 16–48 px the label is replaced by a
+tile, with a green "SHEETS" label that tells the JAS apps apart. At 16–48 px the label is replaced by a
 green bar along the bottom, since text is unreadable at those sizes.
 
 All files in this folder (`.ico`, `.icns`, `.png`, `.svg` and `hicolor/`) are generated from
