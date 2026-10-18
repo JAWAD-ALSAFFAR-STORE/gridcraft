@@ -1,4 +1,4 @@
-//! GridCraft's egui frontend: an Excel-style window (title bar with Quick Access Toolbar,
+//! JAS Excel's egui frontend: an Excel-style window (title bar with Quick Access Toolbar,
 //! ribbon, formula bar, grid, sheet tabs, status bar) over `gridcraft-engine`.
 //!
 //! The UI is thin: it reads engine state and acts through [`SheetApp::run`] (engine commands by
@@ -148,7 +148,7 @@ pub enum NoticeKind {
 }
 
 /// A dismissible bar under the ribbon, in the spirit of Excel's message bar. Used to tell the
-/// user what an opened file carried that GridCraft handled differently (e.g. preserved macros).
+/// user what an opened file carried that JAS Excel handled differently (e.g. preserved macros).
 #[derive(Clone, Debug, PartialEq)]
 pub struct Notice {
     pub text: String,
@@ -431,7 +431,7 @@ impl SheetApp {
         if e.contains("is not available right now") {
             self.toast = Some((e, now_ms()));
         } else {
-            self.message = Some(("GridCraft".into(), clean_error(&e)));
+            self.message = Some(("JAS Excel".into(), clean_error(&e)));
         }
     }
 
@@ -578,7 +578,7 @@ impl SheetApp {
         for req in self.session.take_ui_requests() {
             match req {
                 UiRequest::Dialog(name, params) => self.open_dialog(&name, params),
-                UiRequest::Message(m) => self.message = Some(("GridCraft".into(), m)),
+                UiRequest::Message(m) => self.message = Some(("JAS Excel".into(), m)),
                 UiRequest::EditCell(text) => {
                     let text = text.map(|text| {
                         self.session
@@ -655,7 +655,7 @@ impl SheetApp {
             Ok(r) => self.after_open(Some(path), &r),
             // A password-protected workbook: ask for the password; the dialog opens it.
             Err(e) if e.contains(gridcraft_engine::io::PASSWORD_REQUIRED) => self.open_dialog("openPassword", json!({"path": path})),
-            Err(e) => self.message = Some(("GridCraft".into(), clean_error(&e))),
+            Err(e) => self.message = Some(("JAS Excel".into(), clean_error(&e))),
         }
         self.after_engine();
     }
@@ -690,7 +690,7 @@ impl SheetApp {
         let vba: Vec<&str> = msgs.iter().copied().filter(|m| m.to_lowercase().contains("macro") || m.contains("VBA")).collect();
         if !vba.is_empty() {
             self.notice = Some(Notice {
-                text: "This workbook contains VBA macros. GridCraft keeps them intact when you save, but does not run them.".into(),
+                text: "This workbook contains VBA macros. JAS Excel keeps them intact when you save, but does not run them.".into(),
                 kind: NoticeKind::Warning,
                 action: Some(("What this means".into(), "macros".into())),
             });
@@ -798,7 +798,7 @@ impl SheetApp {
         let text = match self.session.active().map(|d| formula_locale::canonical(&text, ed.locale, &d.wb, ed.sheet, ed.cell)) {
             Some(Ok(text)) => text,
             Some(Err(error)) => {
-                self.message = Some(("GridCraft".into(), error.to_string()));
+                self.message = Some(("JAS Excel".into(), error.to_string()));
                 self.editor = Some(ed);
                 self.session.mode = gridcraft_engine::Mode::Edit;
                 return false;
@@ -810,7 +810,7 @@ impl SheetApp {
             && let Some((dv, msg)) = gridcraft_engine::cmd::data::check_validation(&d.wb, ed.sheet, ed.cell, &text)
         {
             if dv.error_style == gridcraft_engine::model::ErrorStyle::Stop {
-                let title = if dv.error_title.is_empty() { "GridCraft".to_string() } else { dv.error_title.clone() };
+                let title = if dv.error_title.is_empty() { "JAS Excel".to_string() } else { dv.error_title.clone() };
                 self.message = Some((title, msg));
                 self.editor = Some(ed);
                 self.session.mode = gridcraft_engine::Mode::Edit;
@@ -832,7 +832,7 @@ impl SheetApp {
                 true
             }
             Err(e) => {
-                self.message = Some(("GridCraft".into(), clean_error(&e)));
+                self.message = Some(("JAS Excel".into(), clean_error(&e)));
                 self.editor = Some(ed);
                 self.session.mode = gridcraft_engine::Mode::Edit;
                 false
@@ -935,7 +935,7 @@ impl SheetApp {
         }
         self.effective_dark = ctx.theme() == egui::Theme::Dark;
         // Interface size: the preference owns the zoom factor, so egui's own Ctrl/Cmd +/-/0 zoom
-        // keys stay off (they would also swallow GridCraft's shortcuts).
+        // keys stay off (they would also swallow JAS Excel's shortcuts).
         if ctx.options(|o| o.zoom_with_keyboard) {
             ctx.options_mut(|o| o.zoom_with_keyboard = false);
         }
@@ -964,7 +964,7 @@ impl SheetApp {
                     self.backstage = None;
                     self.open_dialog("openPassword", json!({"name": name, "base64": b64}));
                 }
-                Err(e) => self.message = Some(("GridCraft".into(), clean_error(&e))),
+                Err(e) => self.message = Some(("JAS Excel".into(), clean_error(&e))),
             }
             self.after_engine();
         }

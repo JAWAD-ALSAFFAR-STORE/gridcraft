@@ -1,4 +1,4 @@
-//! Pass-through of package content GridCraft does not model, so that open → edit → save keeps it.
+//! Pass-through of package content JAS Excel does not model, so that open → edit → save keeps it.
 //!
 //! On read, the raw bytes of unmodelled parts are kept with their content type and their
 //! relationship graph, per owner: the package root (custom document properties, ribbon
@@ -10,7 +10,7 @@
 //!
 //! On write, kept parts get fresh part names where needed and new relationship ids; the `r:id`s in
 //! kept XML are rewritten to match. Kept content is conservative:
-//! - Anything whose relationship graph reaches a part GridCraft reads and rewrites (worksheets,
+//! - Anything whose relationship graph reaches a part JAS Excel reads and rewrites (worksheets,
 //!   drawings, charts, tables, PivotTables, comments, slicers…) is not kept: it would point at
 //!   content that no longer exists in the same form.
 //! - External relationship targets (the path of a linked workbook) are kept as text and never
@@ -86,7 +86,7 @@ const SHEET_ELEMENT_KINDS: &[&str] = &["oleObject", "ctrlProp", "control", "imag
 /// Kept sheet elements, in schema order (all after `<legacyDrawing>`, before `<tableParts>`).
 const SHEET_SLOTS: &[&str] = &["picture", "oleObjects", "controls"];
 
-/// Relationship kinds GridCraft reads and rewrites, or that depend on content it rewrites:
+/// Relationship kinds JAS Excel reads and rewrites, or that depend on content it rewrites:
 /// kept content whose graph reaches one of them is dropped.
 const REWRITTEN: &[&str] = &[
     "officedocument",
@@ -131,7 +131,7 @@ const REWRITTEN: &[&str] = &[
     "powerpivotdata",
 ];
 
-/// Part-name prefixes (lower case) GridCraft's writer never produces: kept parts there keep their
+/// Part-name prefixes (lower case) JAS Excel's writer never produces: kept parts there keep their
 /// original names. Anything else is renamed so it can't collide with written parts.
 const OWN_DIRS: &[&str] = &[
     "customxml/",
@@ -454,7 +454,7 @@ impl KeptReader {
         }
     }
 
-    /// The sheet's VML drawing without its notes (GridCraft writes those), and the parts its
+    /// The sheet's VML drawing without its notes (JAS Excel writes those), and the parts its
     /// shapes refer to (preview images).
     fn vml(
         &mut self,
@@ -650,7 +650,7 @@ fn shape_numbers(vml: &str) -> Vec<u64> {
         .collect()
 }
 
-/// Kept VML (controls, OLE objects) plus GridCraft's note shapes: the notes get ids in a fresh
+/// Kept VML (controls, OLE objects) plus JAS Excel's note shapes: the notes get ids in a fresh
 /// shape block so they can't collide with the kept shapes the sheet XML refers to.
 fn merge_vml(kept: &str, ours: &str) -> String {
     let Some(close) = kept.rfind("</xml>") else { return ours.to_string() };
@@ -886,7 +886,7 @@ impl<'a> SheetKept<'a> {
         }
     }
 
-    /// GridCraft's notes VML for part `name`, merged with the kept control and object shapes.
+    /// JAS Excel's notes VML for part `name`, merged with the kept control and object shapes.
     pub fn notes_vml(&self, ours: String, name: &str, out: &mut Out) -> String {
         let Some(vml) = self.vml() else { return ours };
         self.write_vml_rels(vml, name, out);
